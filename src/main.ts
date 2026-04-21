@@ -27,50 +27,91 @@ async function main() {
     return;
   }
 
-  container.innerHTML = data.kids.map(renderKid).join('');
+  const days = groupByDay(data.kids);
+
+  if (days.size === 0) {
+    container.innerHTML = `<p class="no-events">No more events this season.</p>`;
+    return;
+  }
+
+  const entries = Array.from(days.entries());
+  const html: string[] = [];
+  let lastWeekendKey = '';
+  for (const [dateKey, events] of entries) {
+    const weekendKey = getWeekendKey(dateKey);
+    if (weekendKey && weekendKey !== lastWeekendKey && lastWeekendKey !== '') {
+      html.push('<hr class="weekend-divider">');
+    }
+    if (weekendKey) lastWeekendKey = weekendKey;
+    html.push(renderDay(dateKey, events, data.kids));
+  }
+  container.innerHTML = html.join('');
 }
 
-function renderKid(kid: KidData): string {
-  const staleNotice =
-    kid.fetchStatus === 'error'
-      ? `<p class="stale-notice">Latest schedule couldn't be loaded — showing what we had last time.</p>`
-      : '';
+function getWeekendKey(dateKey: string): string | null {
+  const [year, month, day] = dateKey.split('-').map(Number);
+  const d = new Date(year, month - 1, day);
+  const dow = d.getDay(); // 0=Sun, 6=Sat
+  if (dow === 6) return dateKey;
+  if (dow === 0) {
+    const sat = new Date(year, month - 1, day - 1);
+    return sat.toLocaleDateString('en-CA'); // YYYY-MM-DD
+  }
+  return null;
+}
 
-  const eventsHtml =
-    kid.events.length === 0
-      ? `<p class="no-events">No more events this season.</p>`
-      : kid.events.map(renderEvent).join('');
+function groupByDay(kids: KidData[]): Map<string, NormalizedEvent[]> {
+  const map = new Map<string, NormalizedEvent[]>();
 
+  for (const kid of kids) {
+    for (const event of kid.events) {
+      const dateKey = event.allDay ? event.start : event.start.slice(0, 10);
+      if (!map.has(dateKey)) map.set(dateKey, []);
+      map.get(dateKey)!.push(event);
+    }
+  }
+
+  // Sort within each day by start ascending, then sort the map keys
+  for (const events of map.values()) {
+    events.sort((a, b) => a.start.localeCompare(b.start));
+  }
+
+  return new Map([...map.entries()].sort(([a], [b]) => a.localeCompare(b)));
+}
+
+function renderDay(dateKey: string, events: NormalizedEvent[], kids: KidData[]): string {
+  const heading = formatDayHeading(dateKey);
+  const eventsHtml = events.map(e => renderEvent(e, kids)).join('');
   return `
-    <section class="kid-section" aria-label="${escapeHtml(kid.name)}'s schedule">
-      <h2>${escapeHtml(kid.name)}</h2>
-      ${staleNotice}
+    <section class="day-section" aria-label="${escapeHtml(heading)}">
+      <h2 class="day-heading">${escapeHtml(heading)}</h2>
       <div class="events-list">${eventsHtml}</div>
     </section>`;
 }
 
-function renderEvent(event: NormalizedEvent): string {
-  const dateStr = event.allDay ? formatAllDayDate(event.start) : formatDate(new Date(event.start));
+function renderEvent(event: NormalizedEvent, kids: KidData[]): string {
   const timeStr = event.allDay ? 'All day' : formatTime(new Date(event.start));
-  const locationHtml =
-    event.location ? `<div class="event-location">${escapeHtml(event.location)}</div>` : '';
+  const locationHtml = event.location
+    ? `<div class="event-location">${escapeHtml(event.location)}</div>`
+    : '';
+
+  const kidData = kids.find(k => k.name === event.kidName);
+  const staleHtml = kidData?.fetchStatus === 'error'
+    ? `<div class="event-stale">may be outdated</div>`
+    : '';
 
   return `
     <div class="event-card">
-      <div class="event-date">${dateStr}</div>
       <div class="event-time">${timeStr}</div>
+      <div class="event-child">${escapeHtml(event.kidName)}</div>
       <div class="event-title">${escapeHtml(event.title)}</div>
       ${locationHtml}
+      ${staleHtml}
     </div>`;
 }
 
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-}
-
-function formatAllDayDate(dateStr: string): string {
-  // Parse YYYY-MM-DD as local to avoid UTC-offset shift
-  const [year, month, day] = dateStr.split('-').map(Number);
+function formatDayHeading(dateKey: string): string {
+  const [year, month, day] = dateKey.split('-').map(Number);
   return new Date(year, month - 1, day).toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',

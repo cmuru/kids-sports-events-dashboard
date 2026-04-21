@@ -62,15 +62,15 @@ main {
   gap: 1.75rem;
 }
 
-@media (min-width: 1024px) {
-  #kids-container {
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-    align-items: start;
-  }
+/* ─── Weekend divider ────────────────────────────────────── */
+.weekend-divider {
+  border: none;
+  border-top: 2px dashed var(--border);
+  margin: 0.5rem 0;
 }
 
-/* ─── Kid card ───────────────────────────────────────────── */
-.kid-section {
+/* ─── Day card ───────────────────────────────────────────── */
+.day-section {
   background: var(--surface);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -78,7 +78,7 @@ main {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.kid-section h2 {
+.day-heading {
   font-size: clamp(1.3rem, 4vw, 1.6rem);
   font-weight: 700;
   padding: 1rem 1.5rem;
@@ -101,13 +101,6 @@ main {
   border-bottom: none;
 }
 
-.event-date {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.3;
-}
-
 .event-time {
   font-size: 1rem;
   color: var(--accent);
@@ -127,20 +120,27 @@ main {
   margin-top: 0.15rem;
 }
 
+.event-child {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.event-stale {
+  font-size: 0.8rem;
+  color: var(--stale-text);
+  margin-top: 0.2rem;
+}
+
 /* ─── States ─────────────────────────────────────────────── */
 .no-events {
   padding: 2rem 1.5rem;
   color: var(--text-secondary);
   font-style: italic;
   font-size: 1rem;
-}
-
-.stale-notice {
-  padding: 0.7rem 1.5rem;
-  background: var(--stale-bg);
-  color: var(--stale-text);
-  font-size: 0.9rem;
-  border-bottom: 1px solid var(--stale-border);
 }
 
 .error-message {
