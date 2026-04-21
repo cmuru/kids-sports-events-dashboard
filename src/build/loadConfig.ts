@@ -4,11 +4,12 @@ import yaml from 'js-yaml';
 
 export interface KidConfig {
   name: string;
-  calendarUrl: string;
+  coachName?: string;
   seasonEndDate: string;
 }
 
 export interface Config {
+  webcalUrl: string;
   kids: KidConfig[];
   resolvedTimezone: string;
 }
@@ -25,22 +26,31 @@ export function loadConfig(configPath = resolve(process.cwd(), 'config.yaml')): 
 
   const parsed = yaml.load(raw) as Record<string, unknown>;
 
+  if (!parsed?.webcalUrl || typeof parsed.webcalUrl !== 'string') {
+    throw new Error('config.yaml must have a top-level "webcalUrl" field.');
+  }
+  const rawWebcalUrl = parsed.webcalUrl as string;
+  const urlToValidate = rawWebcalUrl.replace(/^webcal:\/\//i, 'https://');
+  try {
+    new URL(urlToValidate);
+  } catch {
+    throw new Error(`webcalUrl "${rawWebcalUrl}" is not a valid URL.`);
+  }
+  const webcalUrl = rawWebcalUrl.replace(/^webcal:\/\//i, 'https://');
+
   if (!Array.isArray(parsed?.kids) || (parsed.kids as unknown[]).length === 0) {
     throw new Error('config.yaml must have a non-empty "kids" list.');
   }
 
   const kids: KidConfig[] = (parsed.kids as unknown[]).map((entry, i) => {
     if (typeof entry !== 'object' || entry === null) {
-      throw new Error(`kids[${i}]: each entry must be an object with name, calendarUrl, and seasonEndDate.`);
+      throw new Error(`kids[${i}]: each entry must be an object with name and seasonEndDate.`);
     }
     const k = entry as Record<string, unknown>;
     const label = typeof k.name === 'string' && k.name ? k.name : `kids[${i}]`;
 
     if (!k.name || typeof k.name !== 'string') {
       throw new Error(`${label}: missing required field "name".`);
-    }
-    if (!k.calendarUrl || typeof k.calendarUrl !== 'string') {
-      throw new Error(`${label}: missing required field "calendarUrl".`);
     }
     if (!k.seasonEndDate) {
       throw new Error(`${label}: missing required field "seasonEndDate".`);
@@ -51,23 +61,20 @@ export function loadConfig(configPath = resolve(process.cwd(), 'config.yaml')): 
       throw new Error(`${label}: seasonEndDate "${seasonEndDate}" must be in YYYY-MM-DD format.`);
     }
 
-    let calendarUrl = k.calendarUrl;
-    const urlToValidate = calendarUrl.replace(/^webcal:\/\//i, 'https://');
-    try {
-      new URL(urlToValidate);
-    } catch {
-      throw new Error(`${label}: calendarUrl "${calendarUrl}" is not a valid URL.`);
+    let coachName: string | undefined;
+    if (k.coachName !== undefined) {
+      if (typeof k.coachName !== 'string' || k.coachName.trim() === '') {
+        throw new Error(`${label}: coachName must be a non-empty string when provided.`);
+      }
+      coachName = k.coachName;
     }
 
-    // Normalize webcal:// → https://
-    calendarUrl = calendarUrl.replace(/^webcal:\/\//i, 'https://');
-
-    return { name: k.name, calendarUrl, seasonEndDate };
+    return { name: k.name, coachName, seasonEndDate };
   });
 
   const resolvedTimezone = resolveTimezone(parsed.timezone);
 
-  return { kids, resolvedTimezone };
+  return { webcalUrl, kids, resolvedTimezone };
 }
 
 function resolveTimezone(raw: unknown): string {

@@ -7,6 +7,7 @@ export interface NormalizedEvent {
   end: string;
   allDay: boolean;
   location: string | null;
+  description: string | null;
 }
 
 export interface KidData {

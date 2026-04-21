@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { loadConfig } from './loadConfig.js';
 import { fetchFeed } from './fetchFeed.js';
 import { parseIcs } from './parseIcs.js';
+import { filterByCoach } from './filterByCoach.js';
 import { filterEvents } from './filterEvents.js';
 import type { EventsData, KidData, NormalizedEvent } from '../types.js';
 
@@ -28,35 +29,37 @@ async function run() {
 
   console.log(`Building events for ${config.kids.length} kid(s) in ${config.resolvedTimezone}`);
 
-  const settled = await Promise.allSettled(
-    config.kids.map(async kid => {
-      const icsText = await fetchFeed(kid.calendarUrl);
-      const parsed = parseIcs(icsText, kid.name);
-      const filtered = filterEvents(parsed, now, kid.seasonEndDate, config.resolvedTimezone);
-      filtered.sort((a, b) => a.start.localeCompare(b.start));
-      return { kid, events: filtered };
-    }),
-  );
+  // Fetch and parse the shared feed once
+  let sharedEvents: NormalizedEvent[] | null = null;
+  let feedError: unknown = null;
+  try {
+    const icsText = await fetchFeed(config.webcalUrl);
+    sharedEvents = parseIcs(icsText);
+  } catch (err) {
+    feedError = err;
+    console.error(`Feed fetch/parse failed: ${feedError}`);
+  }
 
   const kids: KidData[] = [];
   let allErrored = true;
   let anyPreviousAvailable = false;
 
-  for (let i = 0; i < config.kids.length; i++) {
-    const kid = config.kids[i];
-    const result = settled[i];
-
-    if (result.status === 'fulfilled') {
+  for (const kid of config.kids) {
+    if (sharedEvents !== null) {
       allErrored = false;
+      const coachFiltered = filterByCoach(sharedEvents, kid.coachName);
+      const withKidName = coachFiltered.map(e => ({ ...e, kidName: kid.name }));
+      const dateFiltered = filterEvents(withKidName, now, kid.seasonEndDate, config.resolvedTimezone);
+      dateFiltered.sort((a, b) => a.start.localeCompare(b.start));
       kids.push({
         name: kid.name,
         seasonEndDate: kid.seasonEndDate,
-        events: result.value.events,
+        events: dateFiltered,
         fetchStatus: 'ok',
       });
-      console.log(`  [${kid.name}] OK — ${result.value.events.length} upcoming event(s)`);
+      console.log(`  [${kid.name}] OK — ${dateFiltered.length} upcoming event(s)`);
     } else {
-      console.error(`  [${kid.name}] Error: ${result.reason}`);
+      console.error(`  [${kid.name}] Error: shared feed unavailable`);
 
       const prevKid = previousData?.kids.find(k => k.name === kid.name);
       let fallbackEvents: NormalizedEvent[] = [];
@@ -76,8 +79,18 @@ async function run() {
     }
   }
 
+  // Log unmatched events (events that didn't match any child's coachName)
+  if (sharedEvents !== null) {
+    const unmatchedCount = sharedEvents.filter(
+      event => !config.kids.some(kid => filterByCoach([event], kid.coachName).length > 0),
+    ).length;
+    if (unmatchedCount > 0) {
+      console.log(`  [info] ${unmatchedCount} event(s) from the shared feed matched no child's coachName.`);
+    }
+  }
+
   if (allErrored && !anyPreviousAvailable) {
-    console.error('All feeds failed and no cached data available. Exiting without writing output so deploy is skipped.');
+    console.error('Feed failed and no cached data available. Exiting without writing output so deploy is skipped.');
     process.exit(1);
   }
 

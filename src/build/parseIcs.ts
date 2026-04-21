@@ -1,12 +1,12 @@
 import ICAL from 'ical.js';
 import type { NormalizedEvent } from '../types.js';
 
-export function parseIcs(icsString: string, kidName: string): NormalizedEvent[] {
+export function parseIcs(icsString: string): NormalizedEvent[] {
   let jcal: unknown;
   try {
     jcal = ICAL.parse(icsString);
   } catch (err) {
-    throw new Error(`Failed to parse ICS for "${kidName}": ${err}`);
+    throw new Error(`Failed to parse ICS feed: ${err}`);
   }
 
   const comp = new ICAL.Component(jcal);
@@ -39,13 +39,17 @@ export function parseIcs(icsString: string, kidName: string): NormalizedEvent[] 
     const rawLocation = vevent.getFirstPropertyValue<string>('location');
     const location = rawLocation && rawLocation.trim() ? rawLocation.trim() : null;
 
+    const rawDescription = vevent.getFirstPropertyValue<string>('description');
+    const description = rawDescription && rawDescription.trim() ? rawDescription.trim() : null;
+
     events.push({
-      kidName,
+      kidName: '',
       title: event.summary?.trim() || '(No title)',
       start,
       end,
       allDay,
       location,
+      description,
     });
   }
 

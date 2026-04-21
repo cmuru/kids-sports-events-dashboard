@@ -5,14 +5,17 @@
 # Examples: America/Toronto, America/New_York, America/Chicago, America/Los_Angeles
 timezone: "America/Toronto"
 
+# Single shared webcal feed URL — contains events for all children.
+# webcal:// URLs are automatically converted to https://.
+webcalUrl: "webcal://calendar.bluesombrero.com/api/v1/Calendar?instancekey=leagues&portalId=11017&id=46964193&key=KJQW4FNC"
+
 kids:
-  # Add one entry per child. webcal:// URLs are automatically converted to https://.
+  # coachName: substring matched (case-insensitive) against each event's description
+  # to assign it to this child. Omit to receive all events from the shared feed.
   - name: "Emma"
-    # Paste the webcal or https subscription URL from your sports league's site.
-    calendarUrl: "webcal://calendar.bluesombrero.com/api/v1/Calendar?instancekey=leagues&portalId=11017&id=46964193&key=KJQW4FNC"
-    # Last day of the season (inclusive). Format: YYYY-MM-DD
+    coachName: "Team Griffith"
     seasonEndDate: "2026-06-30"
 
   - name: "Oliver"
-    calendarUrl: "webcal://calendar.bluesombrero.com/api/v1/Calendar?instancekey=leagues&portalId=11017&id=46964198&key=7CLKYCUU"
+    coachName: "2BE-Bernie"
     seasonEndDate: "2026-06-30"

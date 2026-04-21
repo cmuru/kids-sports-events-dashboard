@@ -1,5 +1,128 @@
 {
-  "generatedAt": "",
-  "timezone": "",
-  "kids": []
+  "generatedAt": "2026-04-21T16:40:36.576-04:00",
+  "timezone": "America/Toronto",
+  "kids": [
+    {
+      "name": "Emma",
+      "seasonEndDate": "2026-06-30",
+      "events": [
+        {
+          "kidName": "Emma",
+          "title": "Team Griffith Vs Team Lajiness",
+          "start": "2026-04-25T16:15:00.000Z",
+          "end": "2026-04-25T17:30:00.000Z",
+          "allDay": false,
+          "location": "3451 W 126th St,Carmel,IN-46032 US",
+          "description": "CCCSC- Shelborne Fields > Field 8N"
+        },
+        {
+          "kidName": "Emma",
+          "title": "Team Scholl Vs Team Griffith",
+          "start": "2026-05-02T18:45:00.000Z",
+          "end": "2026-05-02T20:00:00.000Z",
+          "allDay": false,
+          "location": "3451 W 126th St,Carmel,IN-46032 US",
+          "description": "CCCSC- Shelborne Fields > Field 8N"
+        },
+        {
+          "kidName": "Emma",
+          "title": "Team Bigler Vs Team Griffith",
+          "start": "2026-05-03T18:45:00.000Z",
+          "end": "2026-05-03T20:00:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 10"
+        },
+        {
+          "kidName": "Emma",
+          "title": "Team Griffith Vs Team Brooks",
+          "start": "2026-05-09T16:15:00.000Z",
+          "end": "2026-05-09T17:30:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 10"
+        },
+        {
+          "kidName": "Emma",
+          "title": "Team Saavedra Vs Team Griffith",
+          "start": "2026-05-16T17:30:00.000Z",
+          "end": "2026-05-16T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 11"
+        },
+        {
+          "kidName": "Emma",
+          "title": "Team Griffith Vs Team Yates",
+          "start": "2026-05-30T17:30:00.000Z",
+          "end": "2026-05-30T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 10"
+        }
+      ],
+      "fetchStatus": "ok"
+    },
+    {
+      "name": "Oliver",
+      "seasonEndDate": "2026-06-30",
+      "events": [
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Bernie Vs 2BE-Jones",
+          "start": "2026-04-25T17:30:00.000Z",
+          "end": "2026-04-25T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        },
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Pollis Vs 2BE-Bernie",
+          "start": "2026-05-02T17:30:00.000Z",
+          "end": "2026-05-02T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        },
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Bernie Vs 2BE-Schmicker",
+          "start": "2026-05-03T21:15:00.000Z",
+          "end": "2026-05-03T22:30:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        },
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Goedde/Bly Vs 2BE-Bernie",
+          "start": "2026-05-09T17:30:00.000Z",
+          "end": "2026-05-09T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        },
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Bernie Vs 2BE-Geib/Heaton",
+          "start": "2026-05-16T17:30:00.000Z",
+          "end": "2026-05-16T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        },
+        {
+          "kidName": "Oliver",
+          "title": "2BE-Gardner Vs 2BE-Bernie",
+          "start": "2026-05-30T17:30:00.000Z",
+          "end": "2026-05-30T18:45:00.000Z",
+          "allDay": false,
+          "location": "5459 E. Main Street,Carmel,IN-46033 US",
+          "description": "Badger Field > Field 12"
+        }
+      ],
+      "fetchStatus": "ok"
+    }
+  ]
 }
