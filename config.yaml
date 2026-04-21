@@ -1,0 +1,18 @@
+# Kids Sports Calendar Dashboard — Configuration
+# Edit this file and push to update the dashboard.
+
+# Your timezone (IANA format). Remove this line to use the default (UTC on GitHub Actions).
+# Examples: America/Toronto, America/New_York, America/Chicago, America/Los_Angeles
+timezone: "America/Toronto"
+
+kids:
+  # Add one entry per child. webcal:// URLs are automatically converted to https://.
+  - name: "Emma"
+    # Paste the webcal or https subscription URL from your sports league's site.
+    calendarUrl: "webcal://calendar.bluesombrero.com/api/v1/Calendar?instancekey=leagues&portalId=11017&id=46964193&key=KJQW4FNC"
+    # Last day of the season (inclusive). Format: YYYY-MM-DD
+    seasonEndDate: "2026-06-30"
+
+  - name: "Oliver"
+    calendarUrl: "webcal://calendar.bluesombrero.com/api/v1/Calendar?instancekey=leagues&portalId=11017&id=46964198&key=7CLKYCUU"
+    seasonEndDate: "2026-06-30"

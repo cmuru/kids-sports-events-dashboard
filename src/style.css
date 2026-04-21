@@ -1,0 +1,163 @@
+/* ─── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Tokens ─────────────────────────────────────────────── */
+:root {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --text: #1a202c;
+  --text-secondary: #4a5568;
+  --accent: #1d4ed8;
+  --accent-dark: #1e3a8a;
+  --border: #e2e8f0;
+  --stale-bg: #fffbeb;
+  --stale-border: #fde68a;
+  --stale-text: #78350f;
+  --error-text: #4a5568;
+  --radius: 14px;
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 1.25rem 1rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.updated-at {
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  min-height: 1.3em;
+}
+
+/* ─── Layout ─────────────────────────────────────────────── */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+#kids-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  #kids-container {
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    align-items: start;
+  }
+}
+
+/* ─── Kid card ───────────────────────────────────────────── */
+.kid-section {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.kid-section h2 {
+  font-size: clamp(1.3rem, 4vw, 1.6rem);
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Events ─────────────────────────────────────────────── */
+.events-list {
+  padding: 0.25rem 0;
+}
+
+.event-card {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.event-card:last-child {
+  border-bottom: none;
+}
+
+.event-date {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.event-time {
+  font-size: 1rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.event-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.event-location {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+/* ─── States ─────────────────────────────────────────────── */
+.no-events {
+  padding: 2rem 1.5rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.stale-notice {
+  padding: 0.7rem 1.5rem;
+  background: var(--stale-bg);
+  color: var(--stale-text);
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--stale-border);
+}
+
+.error-message {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: var(--error-text);
+  font-size: 1.1rem;
+}
+
+.error-message p + p {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
