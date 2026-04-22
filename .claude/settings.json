@@ -4,7 +4,10 @@
       "Bash(openspec --version)",
       "Bash(openspec new *)",
       "Bash(openspec instructions *)",
-      "Bash(openspec status *)"
+      "Bash(openspec status *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
