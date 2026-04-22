@@ -120,6 +120,12 @@ main {
   margin-top: 0.15rem;
 }
 
+.event-location a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .event-child {
   font-size: 0.85rem;
   font-weight: 600;

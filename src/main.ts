@@ -92,7 +92,7 @@ function renderDay(dateKey: string, events: NormalizedEvent[], kids: KidData[]):
 function renderEvent(event: NormalizedEvent, kids: KidData[]): string {
   const timeStr = event.allDay ? 'All day' : formatTime(new Date(event.start));
   const locationHtml = event.location
-    ? `<div class="event-location">${escapeHtml(event.location)}</div>`
+    ? `<div class="event-location"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}" target="_blank" rel="noopener noreferrer">${escapeHtml(event.location)}</a></div>`
     : '';
 
   const kidData = kids.find(k => k.name === event.kidName);
