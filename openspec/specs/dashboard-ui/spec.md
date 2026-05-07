@@ -12,7 +12,8 @@ The page SHALL render one section per calendar day that has at least one upcomin
 - Start time in 12-hour local format with am/pm (for timed events), or the word "All day" (for all-day events)
 - Child's name identifying whose event it is
 - Event title
-- Location, if present
+- Description, if present, rendered above the location line
+- Location, if present, rendered as a clickable link that opens Google Maps for that address in a new tab
 - A subtle stale indicator if the child's `fetchStatus` is `"error"` (e.g., "may be outdated")
 
 #### Scenario: Multiple children with events on the same day
@@ -31,9 +32,25 @@ The page SHALL render one section per calendar day that has at least one upcomin
 - **WHEN** an event's `location` is null or empty
 - **THEN** the location line is omitted rather than rendered as blank or "null"
 
+#### Scenario: Event with a description
+- **WHEN** an event's `description` field is a non-empty string
+- **THEN** the event card shows the description text on its own line, above the location line
+
+#### Scenario: Event with no description
+- **WHEN** an event's `description` is null or empty
+- **THEN** the description line is omitted rather than rendered as blank or "null"
+
+#### Scenario: Event with description but no location
+- **WHEN** an event has a non-empty `description` and a null or empty `location`
+- **THEN** the description line is shown and no location line appears
+
 #### Scenario: Stale child events shown in day section
 - **WHEN** a child's `fetchStatus` is `"error"` and their events appear in a day section
 - **THEN** each of that child's event cards includes a subtle notice indicating the data may be outdated
+
+#### Scenario: Event with a location
+- **WHEN** an event's `location` is a non-empty string
+- **THEN** the location is rendered as a clickable link pointing to Google Maps search for that address
 
 ### Requirement: Site-wide empty state when no days have events
 The page SHALL display a single "No more events this season" message when the combined event list across all children is empty, rather than a per-child empty state.
