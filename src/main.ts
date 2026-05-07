@@ -91,6 +91,9 @@ function renderDay(dateKey: string, events: NormalizedEvent[], kids: KidData[]):
 
 function renderEvent(event: NormalizedEvent, kids: KidData[]): string {
   const timeStr = event.allDay ? 'All day' : formatTime(new Date(event.start));
+  const descriptionHtml = event.description
+    ? `<div class="event-description">${escapeHtml(event.description)}</div>`
+    : '';
   const locationHtml = event.location
     ? `<div class="event-location"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.location)}" target="_blank" rel="noopener noreferrer">${escapeHtml(event.location)}</a></div>`
     : '';
@@ -105,6 +108,7 @@ function renderEvent(event: NormalizedEvent, kids: KidData[]): string {
       <div class="event-time">${timeStr}</div>
       <div class="event-child">${escapeHtml(event.kidName)}</div>
       <div class="event-title">${escapeHtml(event.title)}</div>
+      ${descriptionHtml}
       ${locationHtml}
       ${staleHtml}
     </div>`;

@@ -114,6 +114,13 @@ main {
   color: var(--text);
 }
 
+.event-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.15rem;
+}
+
 .event-location {
   font-size: 0.95rem;
   color: var(--text-secondary);
